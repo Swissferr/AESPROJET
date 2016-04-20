@@ -3,4 +3,4 @@
 
 using namespace std;
 
-void creerBlocs(string texte); //Fonction qui créer un vecteur de blocs de 4X4
+void creerBlocs(string texte); //Fonction qui crée un vecteur de blocs de 4X4
