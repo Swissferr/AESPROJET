@@ -8,12 +8,7 @@ using namespace std;
 
 int main() {
 
-	string texte = "";
-
-	cout << "entrez un mot criss de cul : ";
-	cin >> texte;
-
-	creerBlocs(texte);
+	cipher();
 
 	cout << "\n";
 	system("PAUSE");
