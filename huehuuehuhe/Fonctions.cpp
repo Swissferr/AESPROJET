@@ -9,10 +9,10 @@ vector<Bloc*> blocs;
 
 void creerBlocs(string texte) {
 	int nbrBlocs = 0;
-	unsigned char test[16];
+	unsigned char temp[16];
 	bool flag = true;
 
-	vector<char> bytes(texte.begin(), texte.end());
+	vector<unsigned char> bytes(texte.begin(), texte.end());
 	bytes.push_back('\0');
 
 	nbrBlocs = int(bytes.size() / 16) + 1;
@@ -22,15 +22,15 @@ void creerBlocs(string texte) {
 
 		for (int i = 0; i < 16; i++) {
 			if (bytes[0] != NULL) {
-				test[i] = bytes[0];
+				temp[i] = bytes[0];
 				bytes.erase(bytes.begin());
 			}
 			else {
-				test[i] = '\0';
+				temp[i] = '\0';
 			}
 		}
 
-		blocs.push_back(new Bloc(test));
+		blocs.push_back(new Bloc(temp));
 
 		if (nbrBlocs == 0)
 			flag = false;
@@ -79,22 +79,20 @@ string convHex(unsigned char c)
 	else
 		out = "00";
 
-	return out;
-	
+	return out;	
 }
 
 void cipher()
 {
 	string texte = "";
-	Bloc temp;
+	Bloc *temp;
 
 	cout << "entrez un mot criss de cul : ";
 	cin >> texte;
 
 	creerBlocs(texte);
 
-	temp = *blocs[0];
-
-	temp.subBytes();
-
+	blocs[0]->subBytes();
+	blocs[0]->shiftRows();
+	blocs[0]->mixColumns();
 }
