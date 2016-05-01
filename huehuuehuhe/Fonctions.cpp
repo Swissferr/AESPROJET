@@ -50,27 +50,6 @@ string convHex(unsigned char c)
 			c /= 16;
 		}
 
-		for (int i = 0; i < mod.size(); i++)
-		{
-			switch (mod[i])
-			{
-			case 10:
-				mod[i] = 'a'; break;
-			case 11:
-				mod[i] = 'b'; break;
-			case 12:
-				mod[i] = 'c'; break;
-			case 13:
-				mod[i] = 'd'; break;
-			case 14:
-				mod[i] = 'e'; break;
-			case 15:
-				mod[i] = 'f'; break;
-			default:
-				break;
-			}//fin du switch
-		}
-
 		for (int i = mod.size() - 1; i >= 0; i--)
 		{
 			out += mod[i];
@@ -85,7 +64,6 @@ string convHex(unsigned char c)
 void cipher()
 {
 	string texte = "";
-	Bloc *temp;
 
 	cout << "entrez un mot criss de cul : ";
 	cin >> texte;
@@ -94,5 +72,9 @@ void cipher()
 
 	blocs[0]->subBytes();
 	blocs[0]->shiftRows();
-	blocs[0]->mixColumns();
+	/*blocs[0]->mixColumns();*/
+
+	blocs[0]->invSubBytes();
+	blocs[0]->invShiftRows();
+	/*blocs[0]->invMixColumns();*/
 }
