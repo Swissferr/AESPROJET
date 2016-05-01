@@ -74,13 +74,13 @@ void cipher()
 
 	blocs[0]->subBytes();
 	blocs[0]->shiftRows();
-<<<<<<< HEAD
+
 	/*blocs[0]->mixColumns();*/
 
 	blocs[0]->invSubBytes();
 	blocs[0]->invShiftRows();
 	/*blocs[0]->invMixColumns();*/
-=======
+
 	blocs[0]->mixColumns();
 }
 
@@ -112,5 +112,5 @@ void subKey()
 	}
 
 
->>>>>>> origin/master
+
 }
