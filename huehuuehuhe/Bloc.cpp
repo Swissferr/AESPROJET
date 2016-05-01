@@ -137,3 +137,59 @@ void Bloc::invAddRoundKey()
 {
 
 }
+
+string Bloc::subKey(int rconCtr)
+{
+	int temp[2];	//Valeurs temporaire pour la substitution.
+	string tempChar;
+
+	unsigned char col4PrevKey[4];
+
+	unsigned char newKey[4][4];
+
+	col4PrevKey[0] = state[1][3];//rotation dirrecte de la colone
+	col4PrevKey[1] = state[2][3];
+	col4PrevKey[2] = state[3][3];
+	col4PrevKey[3] = state[0][3];
+
+
+	for (int i = 0; i < 4; i++)	//subByte de la colone
+	{
+		try
+		{
+			tempChar = convHex(col4PrevKey[i]);
+			temp[0] = tempChar[0];
+			temp[1] = tempChar[1];
+			col4PrevKey[i] = s[temp[0]][temp[1]];
+		}
+			catch (exception e)
+			{
+				//lol ça a planté
+			}
+		}
+
+	for (int i = 0; i < 4; i++)
+	{
+		for (int u = 0; u < 4; u++)
+		{
+			if (i == 0)
+			{
+				col4PrevKey[u] = state[u][i] ^ col4PrevKey[u] ^ rcon[u][rconCtr];
+			}
+			else
+			{
+				col4PrevKey[u] = state[u][i] ^ col4PrevKey[u];
+			}
+			newKey[u][i] = col4PrevKey[u];
+		}
+	}
+
+	string newKeyBloc = "";
+
+	for (int i = 0; i < 16; i++)
+	{
+		newKeyBloc += newKey[0][i];
+	}
+
+	return newKeyBloc;
+}
