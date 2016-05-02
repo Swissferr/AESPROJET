@@ -88,26 +88,36 @@ void subKey()
 {
 	string txt = "0123456789ABCDEF";
 
+	unsigned char temp[16] =
+	{
+		0x2b, 0x7e, 0x15, 0x16, 0x28, 0xae, 0xd2, 0xa6,
+		0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c
+	};
+
 	for (int i = 0; i < 10; i++)
 	{
 		if (i != 0)
 		{
 			txt = key[i - 1]->subKey(i);
-		}
-		unsigned char temp[16];
 
-		vector<unsigned char> bytes(txt.begin(), txt.end());
-		bytes.push_back('\0');
+			vector<unsigned char> bytes(txt.begin(), txt.end());
+			bytes.push_back('\0');
 
-		for (int i = 0; i < 16; i++) {
-			if (bytes[0] != NULL) {
-				temp[i] = bytes[0];
-				bytes.erase(bytes.begin());
-			}
-			else {
-				temp[i] = '\0';
+			for (int i = 0; i < 16; i++)
+			{
+				if (bytes[0] != NULL)
+				{
+					temp[i] = bytes[0];
+					bytes.erase(bytes.begin());
+				}
+				else
+				{
+					temp[i] = '\0';
+				}
 			}
 		}
+		
+		
 		key.push_back(new Bloc(temp));
 	}
 

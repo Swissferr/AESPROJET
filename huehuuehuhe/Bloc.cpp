@@ -214,10 +214,10 @@ string Bloc::subKey(int rconCtr)
 
 	unsigned char newKey[4][4];
 
-	col4PrevKey[0] = state[1][3];//rotation dirrecte de la colone
-	col4PrevKey[1] = state[2][3];
+	col4PrevKey[0] = state[3][1];//rotation dirrecte de la colone
+	col4PrevKey[1] = state[3][2];
 	col4PrevKey[2] = state[3][3];
-	col4PrevKey[3] = state[0][3];
+	col4PrevKey[3] = state[3][0];
 
 
 	for (int i = 0; i < 4; i++)	//subByte de la colone
@@ -225,8 +225,16 @@ string Bloc::subKey(int rconCtr)
 		try
 		{
 			tempChar = convHex(col4PrevKey[i]);
-			temp[0] = tempChar[0];
-			temp[1] = tempChar[1];
+			if (tempChar.length() == 2)
+			{
+				temp[0] = tempChar[0];
+				temp[1] = tempChar[1];
+			}
+			else if (tempChar.length() == 1)
+			{
+				temp[0] = 0;
+				temp[1] = tempChar[0];
+			}
 			col4PrevKey[i] = s[temp[0]][temp[1]];
 		}
 			catch (exception e)
@@ -241,13 +249,14 @@ string Bloc::subKey(int rconCtr)
 		{
 			if (i == 0)
 			{
-				col4PrevKey[u] = state[u][i] ^ col4PrevKey[u] ^ rcon[u][rconCtr];
+				col4PrevKey[u] = col4PrevKey[u] ^ rcon[u][rconCtr - 1];
+				col4PrevKey[u] = state[i][u] ^ col4PrevKey[u];
 			}
 			else
 			{
-				col4PrevKey[u] = state[u][i] ^ col4PrevKey[u];
+				col4PrevKey[u] = state[i][u] ^ col4PrevKey[u];
 			}
-			newKey[u][i] = col4PrevKey[u];
+			newKey[i][u] = col4PrevKey[u];
 		}
 	}
 
