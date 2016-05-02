@@ -27,7 +27,7 @@ void creerBlocs(string texte) {
 				bytes.erase(bytes.begin());
 			}
 			else {
-				temp[i] = '\0';
+				temp[i] = 0x00;
 			}
 		}
 
@@ -57,7 +57,9 @@ string convHex(unsigned char c)
 		}
 	}
 	else
-		out = "00";
+	{
+		out += '\0';
+	}
 
 	return out;	
 }
@@ -67,22 +69,26 @@ void cipher()
 	string texte = "";
 
 	cout << "entrez un mot criss de cul : ";
-	cin >> texte;
+	getline(cin, texte);
 
 	creerBlocs(texte);
 	subKey();
 
+	blocs[0]->print(0, 0);
+
 	blocs[0]->subBytes();
+	blocs[0]->print(0, 1);
 	blocs[0]->shiftRows();
+	blocs[0]->print(0, 2);
+	blocs[0]->print(0, 3);
 
-	/*blocs[0]->mixColumns();*/
-
-	blocs[0]->invSubBytes();
+	/*blocs[0]->invSubBytes();
+	blocs[0]->print(0, 5);
 	blocs[0]->invShiftRows();
-	/*blocs[0]->invMixColumns();*/
+	blocs[0]->print(0, 6);*/
 
-	blocs[0]->mixColumns();
 }
+	
 
 void subKey()
 {
@@ -110,7 +116,4 @@ void subKey()
 		}
 		key.push_back(new Bloc(temp));
 	}
-
-
-
 }

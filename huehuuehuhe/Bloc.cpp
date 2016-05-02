@@ -37,8 +37,17 @@ void Bloc::subBytes()
 		try
 		{
 			tempChar = convHex(state[0][i]);
-			temp[0] = tempChar[0];
-			temp[1] = tempChar[1];
+			
+			if (tempChar.length() == 2)
+			{
+				temp[0] = tempChar[0];
+				temp[1] = tempChar[1];
+			}
+			else if (tempChar.length() == 1)
+			{
+				temp[0] = 0;
+				temp[1] = tempChar[0];
+			}
 
 			state[0][i] = s[temp[0]][temp[1]];
 		}
@@ -224,8 +233,18 @@ string Bloc::subKey(int rconCtr)
 		try
 		{
 			tempChar = convHex(col4PrevKey[i]);
-			temp[0] = tempChar[0];
-			temp[1] = tempChar[1];
+
+			if (tempChar.length() == 2)
+			{
+				temp[0] = tempChar[0];
+				temp[1] = tempChar[1];
+			}
+			else if (tempChar.length() == 1)
+			{
+				temp[0] = 0;
+				temp[1] = tempChar[0];
+			}
+
 			col4PrevKey[i] = s[temp[0]][temp[1]];
 		}
 			catch (exception e)
@@ -258,4 +277,34 @@ string Bloc::subKey(int rconCtr)
 	}
 
 	return newKeyBloc;
+}
+
+void Bloc::print(int round, int op)
+{
+	switch (op)
+	{
+	case 0:
+		cout << "Ronde " << round << ", Entree: "; break;
+	case 1:
+		cout << "Ronde " << round << ", subBytes(): "; break;
+	case 2:
+		cout << "Ronde " << round << ", shiftRows(): "; break;
+	case 3:
+		cout << "Ronde " << round << ", mixColumns(): "; break;
+	case 4:
+		cout << "Ronde " << round << ", addRoundKey(): "; break;
+	case 5:
+		cout << "Ronde " << round << ", invSubBytes(): "; break;
+	case 6:
+		cout << "Ronde " << round << ", invShiftRows(): "; break;
+	case 7:
+		cout << "Ronde " << round << ", invMixColumns(): "; break;
+	}
+
+	for (int i = 0; i < 16; i++)
+	{
+		cout << state[0][i];
+	}
+
+	cout << endl;
 }

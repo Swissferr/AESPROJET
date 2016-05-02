@@ -1,5 +1,6 @@
 #pragma once
 #include "Fonctions.h"
+#include <iostream>
 
 class Bloc
 {
@@ -13,6 +14,8 @@ public:
 	void shiftRows(); //Translation des lignes du tableau.
 	void mixColumns(); //Multiplication matricielle avec un matrice constante.
 	void addRoundKey(); //Opération XOR avec une clé dérivée de la clé principale.
+
+	void print(int round, int op); //Affichage de la matrice state dans la console.
 
 	//méthodes de décodage.
 	void invSubBytes(); //Substitution des bytes du tableau avec une table constante. (inverse)

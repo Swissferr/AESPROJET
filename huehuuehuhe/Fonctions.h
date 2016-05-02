@@ -10,3 +10,4 @@ string convHex(unsigned char c);
 void cipher(); //Application de l'algorithme.
 
 void subKey();
+
