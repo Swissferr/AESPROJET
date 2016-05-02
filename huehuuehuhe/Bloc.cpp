@@ -211,10 +211,9 @@ string Bloc::subKey(int rconCtr)
 	string tempChar;
 
 	unsigned char col4PrevKey[4];
-
 	unsigned char newKey[4][4];
 
-	col4PrevKey[0] = state[1][3];//rotation dirrecte de la colone
+	col4PrevKey[0] = state[1][3];//rotation directe de la colone
 	col4PrevKey[1] = state[2][3];
 	col4PrevKey[2] = state[3][3];
 	col4PrevKey[3] = state[0][3];
