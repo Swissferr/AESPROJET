@@ -1,1 +1,19 @@
-﻿  huehuuehuhe.vcxproj -> C:\Users\Justin\Desktop\AESPROJET\Debug\huehuuehuhe.exe
+﻿  Bloc.cpp
+  Generating Code...
+  Compiling...
+  Fonctions.cpp
+c:\users\justin\desktop\aesprojet\huehuuehuhe\fonctions.cpp(90): warning C4018: '<': signed/unsigned mismatch
+c:\users\justin\desktop\aesprojet\huehuuehuhe\fonctions.cpp(100): warning C4018: '<': signed/unsigned mismatch
+c:\users\justin\desktop\aesprojet\huehuuehuhe\fonctions.cpp(106): warning C4018: '<': signed/unsigned mismatch
+c:\users\justin\desktop\aesprojet\huehuuehuhe\fonctions.cpp(114): warning C4018: '<': signed/unsigned mismatch
+c:\users\justin\desktop\aesprojet\huehuuehuhe\fonctions.cpp(121): warning C4018: '<': signed/unsigned mismatch
+c:\users\justin\desktop\aesprojet\huehuuehuhe\fonctions.cpp(139): warning C4018: '<': signed/unsigned mismatch
+c:\users\justin\desktop\aesprojet\huehuuehuhe\fonctions.cpp(149): warning C4018: '<': signed/unsigned mismatch
+c:\users\justin\desktop\aesprojet\huehuuehuhe\fonctions.cpp(155): warning C4018: '<': signed/unsigned mismatch
+c:\users\justin\desktop\aesprojet\huehuuehuhe\fonctions.cpp(163): warning C4018: '<': signed/unsigned mismatch
+c:\users\justin\desktop\aesprojet\huehuuehuhe\fonctions.cpp(170): warning C4018: '<': signed/unsigned mismatch
+c:\users\justin\desktop\aesprojet\huehuuehuhe\fonctions.cpp(205): warning C4018: '<': signed/unsigned mismatch
+  Generating Code...
+  Skipping... (no relevant changes detected)
+  main.cpp
+  huehuuehuhe.vcxproj -> C:\Users\Justin\Desktop\AESPROJET\Debug\huehuuehuhe.exe

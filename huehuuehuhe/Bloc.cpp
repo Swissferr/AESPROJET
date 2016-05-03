@@ -104,7 +104,7 @@ void Bloc::mixColumns()
 		{
 			for (int k = 0; k < 4; k++)
 			{
-				result[j] += a[j][k] * temp[k];
+				result[j] ^= a[j][k] * temp[k];
 			}
 		}
 
@@ -119,7 +119,7 @@ void Bloc::addRoundKey(Bloc* key)
 {
 	for (int i = 0; i < 16; i++)
 	{
-		state[0][i] ^= key->state[0][i];
+		state[0][i] = state[0][i] ^ key->state[0][i];
 	}
 }
 
@@ -201,7 +201,7 @@ void Bloc::invMixColumns()
 		{
 			for (int k = 0; k < 4; k++)
 			{
-				result[j] += inv_a[j][k] * temp[k];
+				result[j] ^= inv_a[j][k] * temp[k];
 			}
 		}
 

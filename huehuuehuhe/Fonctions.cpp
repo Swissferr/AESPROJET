@@ -134,40 +134,18 @@ void inv_cipher()
 	int round = 10;
 
 	print(0, round);
-	//première étape: addRoundKey();
+
+	//Round Input
 	for (int i = 0; i < blocs.size(); i++)
 	{
 		blocs[i]->addRoundKey(key[round]);
 	}
 	print(4, round);
-
-	for (int i = 0; i < blocs.size(); i++)
-	{
-		blocs[i]->invShiftRows();
-	}
-	print(6, round);
-
-	for (int i = 0; i < blocs.size(); i++)
-	{
-		blocs[i]->invSubBytes();
-	}
-	print(5, round);
-
 	round--;
-	for (int i = 0; i < blocs.size(); i++)
+	//Pour chaque bloc dans le message, la clé de départ est appliquée.
+	//rounds 1 à 10
+	for (round; round >= 0; round--)
 	{
-		blocs[i]->addRoundKey(key[round]);
-	}
-	print(4, round);
-
-	for (round; round > 0; round--)
-	{
-		for (int i = 0; i < blocs.size(); i++)
-		{
-			blocs[i]->invSubBytes();
-		}
-		print(5, round);
-
 		for (int i = 0; i < blocs.size(); i++)
 		{
 			blocs[i]->invShiftRows();
@@ -176,9 +154,18 @@ void inv_cipher()
 
 		for (int i = 0; i < blocs.size(); i++)
 		{
-			blocs[i]->invMixColumns();
+			blocs[i]->invSubBytes();
 		}
-		print(7, round);
+		print(5, round);		
+
+		if (round != 0)
+		{
+			for (int i = 0; i < blocs.size(); i++)
+			{
+				blocs[i]->invMixColumns();
+			}
+			print(7, round);
+		}
 
 		for (int i = 0; i < blocs.size(); i++)
 		{
@@ -187,25 +174,8 @@ void inv_cipher()
 		print(4, round);
 	}
 
-	for (int i = 0; i < blocs.size(); i++)
-	{
-		blocs[i]->invSubBytes();
-	}
-	print(5, round);
-
-	for (int i = 0; i < blocs.size(); i++)
-	{
-		blocs[i]->invShiftRows();
-	}
-	print(6, round);
-
-	for (int i = 0; i < blocs.size(); i++)
-	{
-		blocs[i]->addRoundKey(key[round]);
-	}
-	print(4, round);
-
 	print(8, round);
+
 }
 
 void print(int etape, int round)
