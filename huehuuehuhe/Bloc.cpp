@@ -115,9 +115,12 @@ void Bloc::mixColumns()
 	}
 }
 
-void Bloc::addRoundKey()
+void Bloc::addRoundKey(Bloc* key)
 {
-
+	for (int i = 0; i < 16; i++)
+	{
+		state[0][i] ^= key->state[0][i];
+	}
 }
 
 //méthodes de décodage.
@@ -207,11 +210,6 @@ void Bloc::invMixColumns()
 		state[2][i] = result[2];
 		state[3][i] = result[3];
 	}
-}
-
-void Bloc::invAddRoundKey()
-{
-
 }
 
 string Bloc::subKey(int rconCtr)
@@ -307,6 +305,5 @@ void Bloc::print(int round, int op)
 	{
 		cout << state[0][i];
 	}
-
 	cout << endl;
 }
