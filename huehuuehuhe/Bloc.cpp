@@ -222,13 +222,9 @@ string Bloc::subKey(int rconCtr)
 	unsigned char col4PrevKey[4];
 	unsigned char newKey[4][4];
 
-<<<<<<< HEAD
+
 	col4PrevKey[0] = state[3][1];//rotation dirrecte de la colone
 	col4PrevKey[1] = state[3][2];
-=======
-	col4PrevKey[0] = state[1][3];//rotation directe de la colone
-	col4PrevKey[1] = state[2][3];
->>>>>>> origin/master
 	col4PrevKey[2] = state[3][3];
 	col4PrevKey[3] = state[3][0];
 
@@ -238,10 +234,7 @@ string Bloc::subKey(int rconCtr)
 		try
 		{
 			tempChar = convHex(col4PrevKey[i]);
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/master
 			if (tempChar.length() == 2)
 			{
 				temp[0] = tempChar[0];
@@ -252,10 +245,7 @@ string Bloc::subKey(int rconCtr)
 				temp[0] = 0;
 				temp[1] = tempChar[0];
 			}
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/master
 			col4PrevKey[i] = s[temp[0]][temp[1]];
 		}
 			catch (exception e)
