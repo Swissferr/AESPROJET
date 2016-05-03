@@ -279,31 +279,3 @@ string Bloc::subKey(int rconCtr)
 	return newKeyBloc;
 }
 
-void Bloc::print(int round, int op)
-{
-	switch (op)
-	{
-	case 0:
-		cout << "Ronde " << round << ", Entree: "; break;
-	case 1:
-		cout << "Ronde " << round << ", subBytes(): "; break;
-	case 2:
-		cout << "Ronde " << round << ", shiftRows(): "; break;
-	case 3:
-		cout << "Ronde " << round << ", mixColumns(): "; break;
-	case 4:
-		cout << "Ronde " << round << ", addRoundKey(): "; break;
-	case 5:
-		cout << "Ronde " << round << ", invSubBytes(): "; break;
-	case 6:
-		cout << "Ronde " << round << ", invShiftRows(): "; break;
-	case 7:
-		cout << "Ronde " << round << ", invMixColumns(): "; break;
-	}
-
-	for (int i = 0; i < 16; i++)
-	{
-		cout << state[0][i];
-	}
-	cout << endl;
-}

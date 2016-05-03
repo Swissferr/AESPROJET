@@ -9,6 +9,9 @@ using namespace std;
 int main() {
 
 	cipher();
+	system("PAUSE");
+	cout << endl;
+	inv_cipher();
 
 	cout << "\n";
 	system("PAUSE");

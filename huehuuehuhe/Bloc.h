@@ -14,9 +14,7 @@ public:
 	void shiftRows(); //Translation des lignes du tableau.
 	void mixColumns(); //Multiplication matricielle avec un matrice constante.
 	void addRoundKey(Bloc* key); //Opération XOR avec une clé dérivée de la clé principale.
-						//La fonction addRoundKey est son propre inverse.
-
-	void print(int round, int op); //Affichage de la matrice state dans la console.
+								 //La fonction addRoundKey est son propre inverse.
 								   
 	//méthodes de décodage.
 	void invSubBytes(); //Substitution des bytes du tableau avec une table constante. (inverse)

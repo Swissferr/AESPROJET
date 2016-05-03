@@ -14,22 +14,29 @@ void creerBlocs(string texte) {
 	bool flag = true;
 
 	vector<unsigned char> bytes(texte.begin(), texte.end());
-	bytes.push_back('\0');
 
-	nbrBlocs = int(bytes.size() / 16) + 1;
+	if (bytes.size() % 16 == 0)
+		nbrBlocs = int(bytes.size() / 16);
+	else
+		nbrBlocs = int(bytes.size() / 16) + 1;
 
 	do {
 		nbrBlocs--;
 
 		for (int i = 0; i < 16; i++) {
-			if (bytes[0] != NULL) {
-				temp[i] = bytes[0];
-				bytes.erase(bytes.begin());
+			if (bytes.size() != 0)
+			{
+				if (bytes[0] != NULL) {
+					temp[i] = bytes[0];
+					bytes.erase(bytes.begin());
+				}
+				else {
+					temp[i] = 0x00;
+					bytes.erase(bytes.begin());
+				}
 			}
-			else {
+			else
 				temp[i] = 0x00;
-				bytes.erase(bytes.begin());
-			}
 		}
 
 		blocs.push_back(new Bloc(temp));
@@ -67,29 +74,177 @@ string convHex(unsigned char c)
 
 void cipher()
 {
+	int round = 0;
+
 	string texte = "";
 
-	cout << "entrez un mot criss de cul : ";
+	cout << "entrez un message: ";
 	getline(cin, texte);
 
 	creerBlocs(texte);
 	subKey();
 
-	blocs[0]->print(0, 0);
+	print(0, round);
 
-	blocs[0]->subBytes();
-	blocs[0]->print(0, 1);
-	blocs[0]->shiftRows();
-	blocs[0]->print(0, 2);
-	blocs[0]->print(0, 3);
+	//Round Input
+	for (int i = 0; i < blocs.size(); i++)
+	{
+		blocs[i]->addRoundKey(key[round]);
+	}
+	print(4, round);
+	round++;
+	//Pour chaque bloc dans le message, la clé de départ est appliquée.
+	//rounds 1 à 10
+	for (round; round <= 10; round++)
+	{
+		for (int i = 0; i < blocs.size(); i++)
+		{
+			blocs[i]->subBytes();			
+		}
+		print(1, round);
 
-	/*blocs[0]->invSubBytes();
-	blocs[0]->print(0, 5);
-	blocs[0]->invShiftRows();
-	blocs[0]->print(0, 6);*/
+		for (int i = 0; i < blocs.size(); i++)
+		{
+			blocs[i]->shiftRows();
+		}
+		print(2, round);
+
+		if (round != 10)
+		{
+			for (int i = 0; i < blocs.size(); i++)
+			{
+				blocs[i]->mixColumns();
+			}
+			print(3, round);
+		}
+
+		for (int i = 0; i < blocs.size(); i++)
+		{
+			blocs[i]->addRoundKey(key[round]);
+		}
+		print(4, round);		
+	}
+	
+	print(8, round);
 
 }
+
+void inv_cipher()
+{
+	int round = 10;
+
+	print(0, round);
+	//première étape: addRoundKey();
+	for (int i = 0; i < blocs.size(); i++)
+	{
+		blocs[i]->addRoundKey(key[round]);
+	}
+	print(4, round);
+
+	for (int i = 0; i < blocs.size(); i++)
+	{
+		blocs[i]->invShiftRows();
+	}
+	print(6, round);
+
+	for (int i = 0; i < blocs.size(); i++)
+	{
+		blocs[i]->invSubBytes();
+	}
+	print(5, round);
+
+	round--;
+	for (int i = 0; i < blocs.size(); i++)
+	{
+		blocs[i]->addRoundKey(key[round]);
+	}
+	print(4, round);
+
+	for (round; round > 0; round--)
+	{
+		for (int i = 0; i < blocs.size(); i++)
+		{
+			blocs[i]->invSubBytes();
+		}
+		print(5, round);
+
+		for (int i = 0; i < blocs.size(); i++)
+		{
+			blocs[i]->invShiftRows();
+		}
+		print(6, round);
+
+		for (int i = 0; i < blocs.size(); i++)
+		{
+			blocs[i]->invMixColumns();
+		}
+		print(7, round);
+
+		for (int i = 0; i < blocs.size(); i++)
+		{
+			blocs[i]->addRoundKey(key[round]);
+		}
+		print(4, round);
+	}
+
+	for (int i = 0; i < blocs.size(); i++)
+	{
+		blocs[i]->invSubBytes();
+	}
+	print(5, round);
+
+	for (int i = 0; i < blocs.size(); i++)
+	{
+		blocs[i]->invShiftRows();
+	}
+	print(6, round);
+
+	for (int i = 0; i < blocs.size(); i++)
+	{
+		blocs[i]->addRoundKey(key[round]);
+	}
+	print(4, round);
+
+	print(8, round);
+}
+
+void print(int etape, int round)
+{
+	switch (etape)
+	{
+	case 0:
+		cout << "Ronde " << round << ", Entree: " << endl; break;
+	case 1:
+		cout << "Ronde " << round << ", subBytes(): " << endl; break;
+	case 2:
+		cout << "Ronde " << round << ", shiftRows(): " << endl; break;
+	case 3:
+		cout << "Ronde " << round << ", mixColumns(): " << endl; break;
+	case 4:
+		cout << "Ronde " << round << ", addRoundKey(): " << endl; break;
+	case 5:
+		cout << "Ronde " << round << ", invSubBytes(): " << endl; break;
+	case 6:
+		cout << "Ronde " << round << ", invShiftRows(): " << endl; break;
+	case 7:
+		cout << "Ronde " << round << ", invMixColumns(): " << endl; break;
+	case 8:
+		cout << "Sortie: " << endl; break;
+	}
+
+	for (int i = 0; i < blocs.size(); i++)
+	{	
+		for (int j = 0; j < 16; j++)
+		{
+			cout << blocs[i]->state[0][j];
+		}
+		cout << endl;
+	}
 	
+	cout << endl;
+}
+	
+
 
 void subKey()
 {
@@ -124,8 +279,7 @@ void subKey()
 				}
 			}
 		}
-		
-		
+				
 		key.push_back(new Bloc(temp));
 	}
 }
