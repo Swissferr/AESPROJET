@@ -28,6 +28,7 @@ void creerBlocs(string texte) {
 			}
 			else {
 				temp[i] = 0x00;
+				bytes.erase(bytes.begin());
 			}
 		}
 
