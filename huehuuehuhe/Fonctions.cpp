@@ -100,7 +100,7 @@ void subKey()
 		0xab, 0xf7, 0x15, 0x88, 0x09, 0xcf, 0x4f, 0x3c
 	};
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i <= 10; i++)
 	{
 		if (i != 0)
 		{
@@ -118,7 +118,8 @@ void subKey()
 				}
 				else
 				{
-					temp[i] = '\0';
+					temp[i] = 0x00;
+					bytes.erase(bytes.begin());
 				}
 			}
 		}
