@@ -147,17 +147,16 @@ void cipher()
 void inv_cipher()
 {
 	int round = 10;
-
+	//Round Input
 	print(0, round);
 
-	//Round Input
+	//Pour chaque bloc dans le message, la clé de départ est appliquée.
 	for (int i = 0; i < blocs.size(); i++)
 	{
 		blocs[i]->addRoundKey(key[round]);
 	}
 	print(4, round);
-
-	//Pour chaque bloc dans le message, la clé de départ est appliquée.
+	
 	//rounds 1 à 10
 	for (round = 9; round > 0; round--)
 	{

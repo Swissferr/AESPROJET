@@ -3,6 +3,10 @@
 
 using namespace std;
 
+//Les commentaires sur les méthodes sont dans le fichier Bloc.h
+//Certaines spécifications seront tout de même directement dans le code des méthodes.
+
+//constructeur par défaut, instantie un bloc vide.
 Bloc::Bloc()
 {
 	for (int i = 0; i < 4; i++)
@@ -14,6 +18,7 @@ Bloc::Bloc()
 	}
 }
 
+//Constructeur surchargé, reçoit un tableau de charactères non-signés pour se remplir.
 Bloc::Bloc(unsigned char c[16])
 {
 	for (int i = 0; i < 16; i++)
@@ -22,22 +27,25 @@ Bloc::Bloc(unsigned char c[16])
 	}
 }
 
+//destructeur
 Bloc::~Bloc()
 {
 	//... lol xD ...
 }
 
+//étape de substitution des bytes à l'aide de la s_box.
 void Bloc::subBytes()
 {
-	unsigned int temp[2];
-	string tempChar;
+	unsigned int temp[2]; //valeur temporaire servant d'index pour la s_box
+	string tempChar; //valeur temporaire du charactère.
 
 	for (int i = 0; i < 16; i++)
 	{
 		try
 		{
-			tempChar = convHex(state[0][i]);
+			tempChar = convHex(state[0][i]); //Convertion du charactère en valeur héxadécimale.
 			
+			//vérification servant à s'assurer qu'un byte trop petit de fausse pas le résultat.
 			if (tempChar.length() == 2)
 			{
 				temp[0] = tempChar[0];
@@ -49,6 +57,7 @@ void Bloc::subBytes()
 				temp[1] = tempChar[0];
 			}
 
+			//Le nouveau byte est trouvé dans la s_box grâce aux deux chiffres dans la valeur héxadécimale du byte de départ.
 			state[0][i] = s[temp[0]][temp[1]];
 		}
 		catch (exception e)
@@ -88,6 +97,7 @@ void Bloc::shiftRows()
 	}
 }
 
+//Multiplication dans GF(2^8).
 unsigned char Bloc::gmul(unsigned char a, unsigned char b) 
 {
 	unsigned char p = 0;
@@ -105,38 +115,44 @@ unsigned char Bloc::gmul(unsigned char a, unsigned char b)
 	return p;
 }
 
+//La méthode mixColumns.
+//L'opération est en fait une multiplication matricielle.
+//Cependant, à cause de la nature des bytes et du champ GF(2^8),
+//on ne peut utiliser d'addition et multiplication régulière:
+//on utilise la multiplication dans GF(2^8) et l'opération Xor.
 void Bloc::mixColumns()
 {
-	unsigned char temp[4];
-	unsigned char result[4];
+	unsigned char temp[4];	//colonne temporaire.
+	unsigned char result[4]; //résultat temporaire.
 
 	for (int i = 0; i < 4; i++)
 	{
-		temp[0] = state[0][i];
-		temp[1] = state[1][i];
-		temp[2] = state[2][i];
-		temp[3] = state[3][i];
-
-		/*for (int j = 0; j < 4; j++)
+		//assignation d'une colonne au tableau temp
+		for (int j = 0; j < 4; j++)
 		{
-			for (int k = 0; k < 4; k++)
-			{
-				result[j] ^= gmul(temp[k], a[j][k]);
-			}
-		}*/
+			temp[j] = state[j][i];
+		}		
+
+		//Calcul du produit matriciel
+		/*
+		|s'1| = |2	3	1	1| |s1|
+		|s'2|   |1	2	3	1| |s2|
+		|s'3|   |1	1	2	3| |s3|
+		|s'4|   |3	1	1	2| |s4|
+		*/
+		//La calcul n'est pas effectué à l'aide de boucle par souci de précision.
 
 		result[0] = gmul(temp[0], 0x02) ^ gmul(temp[1], 0x03) ^ temp[2] ^ temp[3];
 		result[1] = temp[0] ^ gmul(temp[1], 0x02) ^ gmul(temp[2], 0x03) ^ temp[3];
 		result[2] = temp[0] ^ temp[1] ^ gmul(temp[2], 0x02) ^ gmul(temp[3], 0x03);
 		result[3] = gmul(temp[0], 0x03) ^ temp[1] ^ temp[2] ^ gmul(temp[3], 0x02);
 
-
-		state[0][i] = result[0];
-		state[1][i] = result[1];
-		state[2][i] = result[2];
-		state[3][i] = result[3];
+		//Réassignation de la colonne dans le tableau principal.
+		for (int j = 0; j < 4; j++)
+		{
+			state[j][i] = result[j];
+		}		
 	}
-
 }
 
 void Bloc::addRoundKey(Bloc* key)
@@ -148,6 +164,8 @@ void Bloc::addRoundKey(Bloc* key)
 }
 
 //méthodes de décodage.
+//Inverse de subBytes, fonctionne exactement de la même façon à 
+//l'exception de l'utilisation de la table inv_s au lieu de s.
 void Bloc::invSubBytes()
 {
 	unsigned int invtemp[2];
@@ -209,38 +227,45 @@ void Bloc::invShiftRows()
 	}
 }
 
+//La méthode inverse de mixColumns.
+//L'opération est en fait une multiplication matricielle.
+//Cependant, à cause de la nature des bytes et du champ GF(2^8),
+//on ne peut utiliser d'addition et multiplication régulière:
+//on utilise la multiplication dans GF(2^8) et l'opération Xor.
+//La matrice constante est différente dans cette méthode.
 void Bloc::invMixColumns()
 {
-	unsigned char temp[4];
-	unsigned char result[4];
+	unsigned char temp[4];	//colonne temporaire.
+	unsigned char result[4]; //résultat temporaire.
 
 	for (int i = 0; i < 4; i++)
 	{
-		temp[0] = state[0][i];
-		temp[1] = state[1][i];
-		temp[2] = state[2][i];
-		temp[3] = state[3][i];
-
-		/*for (int j = 0; j < 4; j++)
+		//assignation d'une colonne au tableau temp.
+		for (int j = 0; j < 4; j++)
 		{
-			for (int k = 0; k < 4; k++)
-			{
-				result[j] ^= gmul(temp[k], inv_a[j][k]);
-			}
-		}*/
+			temp[j] = state[j][i];
+		}
+
+		//Calcul du produit matriciel
+		/*
+		|s'1| = |0e	0b	0d	09| |s1|
+		|s'2|   |09	0e	0b	0d| |s2|
+		|s'3|   |0d	09	0e	0b| |s3|
+		|s'4|   |0b	0d	09	0e| |s4|
+		*/
+		//La calcul n'est pas effectué à l'aide de boucle par souci de précision.
 
 		result[0] = gmul(temp[0], 0x0e) ^ gmul(temp[1], 0x0b) ^ gmul(temp[2], 0x0d) ^ gmul(temp[3], 0x09);
 		result[1] = gmul(temp[0], 0x09) ^ gmul(temp[1], 0x0e) ^ gmul(temp[2], 0x0b) ^ gmul(temp[3], 0x0d);
 		result[2] = gmul(temp[0], 0x0d) ^ gmul(temp[1], 0x09) ^ gmul(temp[2], 0x0e) ^ gmul(temp[3], 0x0b);
 		result[3] = gmul(temp[0], 0x0b) ^ gmul(temp[1], 0x0d) ^ gmul(temp[2], 0x09) ^ gmul(temp[3], 0x0e);
 
-		state[0][i] = result[0];
-		state[1][i] = result[1];
-		state[2][i] = result[2];
-		state[3][i] = result[3];
+		//Réassignation de la colonne dans le tableau principal.
+		for (int j = 0; j < 4; j++)
+		{
+			state[j][i] = result[j];
+		}
 	}
-
-
 }
 
 string Bloc::subKey(int rconCtr)
@@ -251,12 +276,10 @@ string Bloc::subKey(int rconCtr)
 	unsigned char col4PrevKey[4];
 	unsigned char newKey[4][4];
 
-
 	col4PrevKey[0] = state[3][1];//rotation dirrecte de la colone
 	col4PrevKey[1] = state[3][2];
 	col4PrevKey[2] = state[3][3];
 	col4PrevKey[3] = state[3][0];
-
 
 	for (int i = 0; i < 4; i++)	//subByte de la colone
 	{

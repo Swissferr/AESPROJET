@@ -28,8 +28,14 @@ public:
 				  //Toutes les opérations seront éxécutées sur ce tableau.
 
 private:
-	unsigned char gmul(unsigned char a, unsigned char b); //fonction qui éxécute la multiplication de bytes dans GF(2^8), le champ de Galois.
-														  //C'est un concept mathématique qui nous est inconnu alors le code à été pris sur internet.
+	unsigned char gmul(unsigned char a, unsigned char b); 
+	//fonction qui éxécute la multiplication de bytes dans GF(2^8), le champ de Galois.
+	//La multiplcation de Galois est en fait l'application du modulo d'un polynôme irréductible (x^8 + x^4 + x^3 + x + 1)
+	//sur le produit des bytes sous forme de polynôme.
+	//C'est un concept mathématique qui nous est inconnu alors le code à été pris 
+	//sur internet.
+	
+	//Table de substitution pour la méthode subBytes().
 	const unsigned char s[16][16] =
 	{
 		{ 0x63, 0x7C, 0x77, 0x7B, 0xF2, 0x6B, 0x6F, 0xC5, 0x30, 0x01, 0x67, 0x2B, 0xFE, 0xD7, 0xAB, 0x76 },
@@ -50,6 +56,7 @@ private:
 		{ 0x8C, 0xA1, 0x89, 0x0D, 0xBF, 0xE6, 0x42, 0x68, 0x41, 0x99, 0x2D, 0x0F, 0xB0, 0x54, 0xBB, 0x16 }
 	};
 
+	//Table de substitution pour la méthode invSubBytes().
 	const unsigned char inv_s[16][16] =
 	{
 		{ 0x52, 0x09, 0x6A, 0xD5, 0x30, 0x36, 0xA5, 0x38, 0xBF, 0x40, 0xA3, 0x9E, 0x81, 0xF3, 0xD7, 0xFB },
@@ -79,15 +86,4 @@ private:
 		{ 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
 	};
 	//Matrice constante d'expansion de clé.
-	
-	const unsigned char a[4][4] = { { 0x02, 0x03, 0x01, 0x01 },
-								    { 0x01, 0x02, 0x03, 0x01 },
-								    { 0x01, 0x01, 0x02, 0x03 },
-								    { 0x03, 0x01, 0x01, 0x02 } };
-
-	const unsigned char inv_a[4][4] = { { 0x0E ,0x0B, 0x0D, 0x09 },
-									    { 0x09 ,0x0E, 0x0B, 0x0D },
-									    { 0x0D ,0x09, 0x0E, 0x0B },
-									    { 0x0B ,0x0D, 0x09, 0x0E } };
-	//Matrices constantes servant à la multiplication dans mixColumns() et invMixColumns().
 };
