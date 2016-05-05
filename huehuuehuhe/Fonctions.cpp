@@ -92,10 +92,10 @@ void cipher()
 		blocs[i]->addRoundKey(key[round]);
 	}
 	print(4, round);
-	round++;
+	
 	//Pour chaque bloc dans le message, la clé de départ est appliquée.
 	//rounds 1 à 10
-	for (round; round <= 10; round++)
+	for (round = 1; round < 10; round++)
 	{
 		for (int i = 0; i < blocs.size(); i++)
 		{
@@ -109,14 +109,11 @@ void cipher()
 		}
 		print(2, round);
 
-		if (round != 10)
+		for (int i = 0; i < blocs.size(); i++)
 		{
-			for (int i = 0; i < blocs.size(); i++)
-			{
-				blocs[i]->mixColumns();
-			}
-			print(3, round);
+			blocs[i]->mixColumns();
 		}
+		print(3, round);	
 
 		for (int i = 0; i < blocs.size(); i++)
 		{
@@ -125,6 +122,24 @@ void cipher()
 		print(4, round);		
 	}
 	
+	for (int i = 0; i < blocs.size(); i++)
+	{
+		blocs[i]->subBytes();
+	}
+	print(1, round);
+
+	for (int i = 0; i < blocs.size(); i++)
+	{
+		blocs[i]->shiftRows();
+	}
+	print(2, round);
+
+	for (int i = 0; i < blocs.size(); i++)
+	{
+		blocs[i]->addRoundKey(key[round]);
+	}
+	print(4, round);
+
 	print(8, round);
 
 }
@@ -141,10 +156,10 @@ void inv_cipher()
 		blocs[i]->addRoundKey(key[round]);
 	}
 	print(4, round);
-	round--;
+
 	//Pour chaque bloc dans le message, la clé de départ est appliquée.
 	//rounds 1 à 10
-	for (round; round >= 0; round--)
+	for (round = 9; round > 0; round--)
 	{
 		for (int i = 0; i < blocs.size(); i++)
 		{
@@ -156,23 +171,39 @@ void inv_cipher()
 		{
 			blocs[i]->invSubBytes();
 		}
-		print(5, round);		
-
-		if (round != 0)
-		{
-			for (int i = 0; i < blocs.size(); i++)
-			{
-				blocs[i]->invMixColumns();
-			}
-			print(7, round);
-		}
+		print(5, round);
 
 		for (int i = 0; i < blocs.size(); i++)
 		{
 			blocs[i]->addRoundKey(key[round]);
 		}
 		print(4, round);
+		
+		for (int i = 0; i < blocs.size(); i++)
+		{
+			blocs[i]->invMixColumns();
+		}
+		print(7, round);		
 	}
+
+	for (int i = 0; i < blocs.size(); i++)
+	{
+		blocs[i]->invShiftRows();
+	}
+	print(6, round);
+
+	for (int i = 0; i < blocs.size(); i++)
+	{
+		blocs[i]->invSubBytes();
+	}
+	print(5, round);
+
+	for (int i = 0; i < blocs.size(); i++)
+	{
+		blocs[i]->addRoundKey(key[round]);
+	}
+	print(4, round);
+
 
 	print(8, round);
 

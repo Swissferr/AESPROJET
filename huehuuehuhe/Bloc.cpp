@@ -88,6 +88,23 @@ void Bloc::shiftRows()
 	}
 }
 
+unsigned char Bloc::gmul(unsigned char a, unsigned char b) 
+{
+	unsigned char p = 0;
+	unsigned char counter;
+	unsigned char hi_bit_set;
+	for (counter = 0; counter < 8; counter++) {
+		if ((b & 1) == 1)
+			p ^= a;
+		hi_bit_set = (a & 0x80);
+		a <<= 1;
+		if (hi_bit_set == 0x80)
+			a ^= 0x1b;
+		b >>= 1;
+	}
+	return p;
+}
+
 void Bloc::mixColumns()
 {
 	unsigned char temp[4];
@@ -100,19 +117,26 @@ void Bloc::mixColumns()
 		temp[2] = state[2][i];
 		temp[3] = state[3][i];
 
-		for (int j = 0; j < 4; j++)
+		/*for (int j = 0; j < 4; j++)
 		{
 			for (int k = 0; k < 4; k++)
 			{
-				result[j] ^= a[j][k] * temp[k];
+				result[j] ^= gmul(temp[k], a[j][k]);
 			}
-		}
+		}*/
+
+		result[0] = gmul(temp[0], 0x02) ^ gmul(temp[1], 0x03) ^ temp[2] ^ temp[3];
+		result[1] = temp[0] ^ gmul(temp[1], 0x02) ^ gmul(temp[2], 0x03) ^ temp[3];
+		result[2] = temp[0] ^ temp[1] ^ gmul(temp[2], 0x02) ^ gmul(temp[3], 0x03);
+		result[3] = gmul(temp[0], 0x03) ^ temp[1] ^ temp[2] ^ gmul(temp[3], 0x02);
+
 
 		state[0][i] = result[0];
 		state[1][i] = result[1];
 		state[2][i] = result[2];
 		state[3][i] = result[3];
 	}
+
 }
 
 void Bloc::addRoundKey(Bloc* key)
@@ -197,19 +221,26 @@ void Bloc::invMixColumns()
 		temp[2] = state[2][i];
 		temp[3] = state[3][i];
 
-		for (int j = 0; j < 4; j++)
+		/*for (int j = 0; j < 4; j++)
 		{
 			for (int k = 0; k < 4; k++)
 			{
-				result[j] ^= inv_a[j][k] * temp[k];
+				result[j] ^= gmul(temp[k], inv_a[j][k]);
 			}
-		}
+		}*/
+
+		result[0] = gmul(temp[0], 0x0e) ^ gmul(temp[1], 0x0b) ^ gmul(temp[2], 0x0d) ^ gmul(temp[3], 0x09);
+		result[1] = gmul(temp[0], 0x09) ^ gmul(temp[1], 0x0e) ^ gmul(temp[2], 0x0b) ^ gmul(temp[3], 0x0d);
+		result[2] = gmul(temp[0], 0x0d) ^ gmul(temp[1], 0x09) ^ gmul(temp[2], 0x0e) ^ gmul(temp[3], 0x0b);
+		result[3] = gmul(temp[0], 0x0b) ^ gmul(temp[1], 0x0d) ^ gmul(temp[2], 0x09) ^ gmul(temp[3], 0x0e);
 
 		state[0][i] = result[0];
 		state[1][i] = result[1];
 		state[2][i] = result[2];
 		state[3][i] = result[3];
 	}
+
+
 }
 
 string Bloc::subKey(int rconCtr)
